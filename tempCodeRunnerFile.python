@@ -1,0 +1,51 @@
+import pygame
+import random
+
+pygame.init()
+
+# game window dimensions
+screen_width = 800
+screen_height = 600
+
+# create game window
+screen = pygame.display.set_mode((screen_width, screen_height))
+
+# game variables
+clock = pygame.time.Clock()
+car_speed = 0
+car_rotation = 0
+car_image = pygame.image.load('car.png').convert_alpha()
+car_rect = car_image.get_rect(center=(screen_width // 2, screen_height // 2))
+
+# background image
+background_image = pygame.image.load('background.jpg').convert()
+
+# game loop
+while True:
+    # event handling
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            quit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                car_speed += 5
+            elif event.key == pygame.K_DOWN:
+                car_speed -= 5
+            elif event.key == pygame.K_LEFT:
+                car_rotation += 5
+            elif event.key == pygame.K_RIGHT:
+                car_rotation -= 5
+
+    # update car position and rotation
+    car_rect.centerx += car_speed
+    car_image_rotated = pygame.transform.rotate(car_image, car_rotation)
+    car_rect_rotated = car_image_rotated.get_rect(center=car_rect.center)
+
+    # draw background and car
+    screen.blit(background_image, (0, 0))
+    screen.blit(car_image_rotated, car_rect_rotated)
+
+    # update the display
+    pygame.display.update()
+    clock.tick(60)  # limit the frame rate to 60 FPS
